@@ -1,0 +1,208 @@
+不只这些。你列的那几个只是**第一天的“生存包”**——让你能在 Ubuntu 里活下来、不迷路。但在这个方向干一年，Linux 是你每天都要用的“操作系统级肌肉记忆”。下面按优先级给你一份完整的 Linux 技能清单，并告诉你学到什么程度、什么时候学。
+
+## 一、必须会（第1周内掌握）
+
+这些是你每天都会敲的，不熟就没法干活。
+
+**文件与目录：**
+- `cd`、`ls`、`pwd`、`mkdir`、`rm`、`cp`、`mv`、`touch`、`cat`
+- `find`：按名字/时间/大小找文件，比如 `find . -name "*.py"`
+- `tree`：看目录结构（需安装）
+- `ln -s`：软链接，ROS2 和 Isaac Gym 里经常用
+- `tar`、`zip/unzip`：解压数据集、代码包
+- `scp`、`rsync`：本地和服务器之间传文件，**跑实验必备**
+
+**文本查看与处理：**
+- `less`、`head`、`tail`：看大文件，`tail -f` 实时看训练日志
+- `grep`：搜关键字，比如 `grep "reward" train.log`
+- `管道` `|` 和重定向 `>`、`>>`：组合命令
+- `wc -l`：数行数
+- `sort`、`uniq`：日志统计
+
+**权限与用户：**
+- `chmod`、`chown`：改权限，装驱动、配设备经常用
+- `sudo`：提权
+- `whoami`、`groups`：看自己身份
+
+**进程与任务：**
+- `ps aux`、`top`、`htop`：看进程和资源占用
+- `kill`、`pkill`：杀进程，训练卡死时救命
+- `&`、`nohup`：后台跑训练，比如 `nohup python train.py &`
+- `jobs`、`fg`、`bg`：任务切换
+
+**网络与远程：**
+- `ssh`：连服务器，你未来跑 Isaac Gym 的主要方式
+- `ssh-keygen`、`ssh-copy-id`：配置免密登录
+- `curl`、`wget`：下载文件、测接口
+- `ping`、`ip addr`、`ss -tuln`：排查网络和端口
+
+**包管理与环境：**
+- `apt`、`dpkg`：装系统级软件
+- `conda`、`pip`：Python 环境管理
+- `export`、`source ~/.bashrc`：环境变量，`LD_LIBRARY_PATH`、`PYTHONPATH` 经常要设
+- `alias`：给自己设快捷命令
+
+**编辑器：**
+- `vim`：不用成为高手，但必须会：`i` 插入、`Esc` 退出、`:wq` 保存退出、`:q!` 不保存退出、`/` 搜索、`dd` 删行、`yy` 复制、`p` 粘贴。改配置文件够用了。
+- 日常写代码用 VS Code + 远程 SSH，比 vim 舒服得多。
+
+## 二、应该会（第1个月内掌握）
+
+这些是进阶但高频的，不会就会经常卡住。
+
+**文本处理三剑客：**
+- `sed`：替换、删除行，比如 `sed -i 's/old/new/g' file`
+- `awk`：按列处理，比如 `awk '{print $1, $3}' log.txt`
+- `cut`、`tr`、`xargs`：配合管道用
+
+**系统与日志：**
+- `systemctl`、`journalctl`：管理服务、看系统日志
+- `df -h`、`du -sh`：磁盘空间，训练数据一多就满
+- `lsblk`、`mount`：挂载硬盘
+- `nvidia-smi`、`watch -n 1 nvidia-smi`：看 GPU 占用，**每天必用**
+
+**终端复用：**
+- `tmux` 或 `screen`：跑训练时断开 SSH 不中断，**这是刚需**。必须会：新建会话、分离 `Ctrl+b d`、恢复 `tmux attach`、分屏。
+
+**编译工具链：**
+- `gcc`、`g++`、`make`、`cmake`、`ninja`
+- `gdb`：调试 C++ 段错误
+- `ldd`：看动态库依赖，装 Isaac Gym 报错时常用
+
+**Shell 脚本：**
+- 变量、`if`、`for`、函数、传参
+- 写简单的 `run_train.sh` 批量跑实验
+
+## 三、加分项（项目驱动时学）
+
+- `Docker`、`nvidia-docker`：环境隔离，很多公司用
+- `ros2` 命令行：`ros2 topic list`、`ros2 node info`、`colcon build`
+- `htop`、`nvtop`、`iotop`：性能监控
+- `strace`、`perf`：底层调试
+- `ssh -L` 端口转发：远程看 TensorBoard
+- `crontab`：定时任务
+- `rsync -avz --exclude`：同步代码，排除大文件
+
+## 四、怎么学、学到什么程度
+
+**不要专门花一周刷 Linux 教程。** 正确方式是：
+
+1. **第1周**：把“必须会”那部分过一遍，每个命令敲10遍，记到笔记里。
+2. **第2周起**：每天用，遇到不会就查。比如 `find` 的高级用法、`grep -r`、`sed` 替换，都是在项目里逼出来的。
+3. **第1个月末**：你应该能熟练用 `ssh` + `tmux` + `nohup` 在服务器上跑训练，用 `nvidia-smi` 看 GPU，用 `grep/tail` 看日志，用 `scp/rsync` 传文件。
+4. **第2个月起**：写简单的 bash 脚本，用 `cmake` 编译 Eigen 工程，用 `gdb` 调 C++ 崩溃。
+5. **第4个月起**：读宇树代码时，你会自然用到 `find`、`grep`、`sed`、`ldd`、`ros2` 命令。
+
+**vim 的要求：** 能改配置文件、能保存退出、能搜索替换就行。不要花时间学插件和高级操作，你的主力编辑器是 VS Code + Remote SSH。
+
+## 五、一句话总结
+
+你列的那几个只是“第一天不迷路”。**真正的 Linux 能力是：能远程连服务器、能用 tmux 挂训练、能用 grep/tail 看日志、能用 scp 传文件、能用 nvidia-smi 看 GPU、能写 bash 脚本、能用 cmake 编译 C++、能用 gdb 调崩溃。** 这些不需要专门学，在项目里每天用，一个月就熟了。
+
+
+
+
+
+
+
+
+
+
+
+
+
+plan:好，那我们就从 Linux 开始。你每天有 10 小时，第一周就按下面这个节奏走，**每天上午 4 小时学 Linux，下午 4 小时练 Linux + 配环境，晚上 2 小时整理笔记 + 提交 Git**。
+
+## 第1天：装系统 + 活下来
+
+- 上午：装 Ubuntu 20.04 双系统（B站“机器人工匠阿杰”）。如果怕翻车，先 VMware 虚拟机过渡。
+- 下午：打开终端，把下面这些命令每个敲 20 遍，直到不用看键盘：
+  ```
+  pwd  ls  cd  mkdir  touch  cp  mv  rm  cat  clear
+  ```
+- 晚上：用 Markdown 写第一篇笔记《Linux 第一天》，提交到 GitHub。
+
+## 第2天：文件与目录 + 文本查看
+
+- 上午：
+  ```
+  find  tree  ln -s  tar  zip/unzip  less  head  tail  wc
+  ```
+- 下午：
+  ```
+  grep  |  >  >>  sort  uniq
+  ```
+  练习：`tail -f train.log`、`grep "reward" train.log | wc -l`
+- 晚上：整理笔记，把常用命令做成一张 cheat sheet。
+
+## 第3天：权限、进程、网络
+
+- 上午：
+  ```
+  chmod  chown  sudo  whoami  ps aux  top  kill  pkill
+  ```
+- 下午：
+  ```
+  ssh  ssh-keygen  scp  rsync  curl  wget  ping  ip addr
+  ```
+  练习：配置 SSH 免密登录（如果连服务器）。
+- 晚上：把 cheat sheet 扩充，提交 Git。
+
+## 第4天：vim + 环境变量 + 包管理
+
+- 上午：vim 只学这些：`i` 插入、`Esc` 退出、`:wq` 保存、`:q!` 不保存、`/` 搜索、`dd` 删行、`yy` 复制、`p` 粘贴。改一个配置文件练手。
+- 下午：
+  ```
+  apt  dpkg  conda  pip  export  source ~/.bashrc  alias
+  ```
+  练习：创建 conda 环境，设置 `LD_LIBRARY_PATH`，加一个 alias。
+- 晚上：整理笔记，提交。
+
+## 第5天：进程管理 + tmux + GPU
+
+- 上午：
+  ```
+  &  nohup  jobs  fg  bg  tmux
+  ```
+  tmux 必须会：新建会话、`Ctrl+b d` 分离、`tmux attach` 恢复、分屏。
+- 下午：
+  ```
+  nvidia-smi  watch -n 1 nvidia-smi  df -h  du -sh  lsblk  mount
+  ```
+- 晚上：用 tmux + nohup 模拟挂一个后台任务，提交笔记。
+
+## 第6天：文本三剑客 + Shell 脚本
+
+- 上午：
+  ```
+  sed  awk  cut  tr  xargs
+  ```
+  练习：用 `sed` 批量替换文件里的字符串，用 `awk` 打印日志第 1、3 列。
+- 下午：写一个 `run_train.sh`：
+  ```bash
+  #!/bin/bash
+  for lr in 1e-4 3e-4 1e-3; do
+      python train.py --lr $lr --logdir logs/lr_$lr
+  done
+  ```
+- 晚上：提交脚本到 Git。
+
+## 第7天：综合验收 + 编译工具链
+
+- 上午：`gcc`、`g++`、`make`、`cmake`、`gdb`、`ldd`。用 CMake 编译一个最简单的 C++ 程序。
+- 下午：综合练习——用 `find` 找文件，`grep` 搜内容，`sed` 替换，`tmux` 挂任务，`nvidia-smi` 看 GPU，`scp` 传文件。
+- 晚上：周复盘，把这一周所有笔记和脚本整理成一个 GitHub 仓库，写 README。
+
+## 推荐资源
+
+- B站“韩顺平 一周学会Linux”——过一遍，1.5 倍速，边看边敲。
+- 《鸟哥的Linux私房菜》——当字典，遇到不会的查。
+- 遇到报错，先 Google/百度，再问人。
+
+## 记住三件事
+
+1. **Linux 不是学出来的，是用出来的。** 从第 2 周开始，你每天的训练、代码、Git 都在 Linux 里做，一个月自然就熟了。
+2. **vim 够用就行**，主力编辑器是 VS Code + Remote SSH。
+3. **每天提交 Git**，一周后你的仓库里就有 Linux 笔记、cheat sheet、shell 脚本，这就是你面试时的底气。
+
+你先从第 1 天开始，装系统遇到问题随时来问。
